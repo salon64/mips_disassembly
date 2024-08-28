@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["salon64"]
 description = "Takes MIPS machine code and return MIPS assembly."
-licence = "MIT"
+license = "MIT"
 
 
 [dependencies]
