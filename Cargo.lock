@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "mips_strings"
+name = "MIPS_disassembly"
 version = "0.1.0"
