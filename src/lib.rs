@@ -70,10 +70,6 @@ const REG_NAMES: [&str; 32] = [
     "ra",
 ];
 
-fn main(){
-
-}
-
 
 
 /// Takes in MIPS machine code and return MIPS assembly
