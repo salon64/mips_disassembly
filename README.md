@@ -14,9 +14,17 @@ use MIPS_disassembly::get_disassembly_adv
 
 let mut sym_tab: HashMap<u32, String> = HashMap::new();
 sym_tab.insert(0x00000108, "decode_if".into());
-let instr: u32 = 0x11a0001a; 
+let instr: u32 = 0x11a0001a;
 let instr_adrs: u32 = 0x9c;
-assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_disassembly_adv(instr, instr_adrs, sym_tab, true));
+assert_eq!(
+    "BEQ $t5, $zero, 26 <decode_if>",
+    get_disassembly_adv(
+        instr,
+        instr_adrs,
+        &sym_tab,
+        &MipsDisassemblyOptions::new(true, true)
+    )
+);
 ```
 
 ## Supported instructions
@@ -72,4 +80,4 @@ assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_disassembly_adv(instr, instr_adr
 - SWR
 
 # Supported pseudo instructions
-None currently
+- NOP
