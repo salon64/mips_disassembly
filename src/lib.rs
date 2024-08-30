@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 // const NOP: u32 = 0;
 const OP_0: u32 = 0;
 
@@ -65,15 +67,33 @@ const OP_SW: u32 = 0b10_1011;
 const OP_SWR: u32 = 0b10_1110;
 
 const REG_NAMES: [&str; 32] = [
-    "zero", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5", "t6",
-    "s7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp", "sp", "fp",
-    "ra",
+    "$zero", "$at", "$v0", "$v1", "$a0", "$a1", "$a2", "$a3", "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6",
+    "$s7", "$s0", "$s1", "$s2", "$s3", "$s4", "$s5", "$s6", "$s7", "$t8", "$t9", "$k0", "$k1", "$gp", "$sp", "$fp",
+    "$ra",
 ];
 
-
-
-/// Takes in MIPS machine code and return MIPS assembly
+const REG_NUMBER: [&str; 32] = [
+    "$0","$1","$2","$3","$4","$5","$6","$7","$8","$9","$10","$11","$12","$13","$14","$15","$16","$17","$18","$19","$20","$21","$22","$23","$24","$25","$26","$27","$28","$29","$30","$31"
+];
+// 24a50001        addiu   a1,a1,1
+/// takes in a mips machine code and returns a string
+/// ```
+/// use MIPS_disassembly::get_dissassembly;
+/// 
+/// let instr: u32 = 0x24a50001;
+/// let instr_asm: String = get_dissassembly(instr);
+/// assert_eq!(instr_asm, "ADDIU $a1, $a1, 1".to_string())
+/// ```
 pub fn get_dissassembly(machine_code: u32) -> String{
+    get_dissassembly_adv(machine_code, 0, HashMap::new(),true)
+}
+/// Takes in MIPS machine code and return MIPS assembly
+fn get_dissassembly_adv(machine_code: u32, innstruction_address:u32, symbol_table: HashMap<u32,String>, use_reg_names: bool) -> String{
+
+    let reg_names = match use_reg_names {
+        true => REG_NAMES,
+        false => REG_NUMBER,
+    };
 
     let op = (machine_code >> 26) & 0x0000_003f;
     let rs = ((machine_code >> 21) & 0x0000_001f) as usize;
@@ -93,66 +113,66 @@ pub fn get_dissassembly(machine_code: u32) -> String{
             OP_0 => {
                 match funct {
                     FUNCT_SLL => {
-                        format!("SLL {}, {}, {}", REG_NAMES[rd], REG_NAMES[rt], REG_NAMES[shamt])
+                        format!("SLL {}, {}, {}", reg_names[rd], reg_names[rt], reg_names[shamt])
                     }
                     FUNCT_SRL => {
-                        format!("SRL {}, {}, {}", REG_NAMES[rd as usize], REG_NAMES[rt], REG_NAMES[shamt])
+                        format!("SRL {}, {}, {}", reg_names[rd as usize], reg_names[rt], reg_names[shamt])
                     }
                     FUNCT_SRA => {
-                        format!("SRA {} {} {}", REG_NAMES[rd],REG_NAMES[rt],REG_NAMES[shamt])
+                        format!("SRA {} {} {}", reg_names[rd],reg_names[rt],reg_names[shamt])
                     }
                     FUNCT_SLLV => {
-                        format!("SLLV {}, {}, {}", REG_NAMES[rd], REG_NAMES[rt], REG_NAMES[rs])
+                        format!("SLLV {}, {}, {}", reg_names[rd], reg_names[rt], reg_names[rs])
                     }
                     FUNCT_SRLV => {
-                        format!("SRLV {}, {}, {}", REG_NAMES[rd], REG_NAMES[rt], REG_NAMES[rs])
+                        format!("SRLV {}, {}, {}", reg_names[rd], reg_names[rt], reg_names[rs])
                     }
                     FUNCT_SRAV => {
-                        format!("SRAV {}, {}, {}", REG_NAMES[rd], REG_NAMES[rt], REG_NAMES[rs])
+                        format!("SRAV {}, {}, {}", reg_names[rd], reg_names[rt], reg_names[rs])
                     }
                     FUNCT_JR => {
-                        format!("JR {}", REG_NAMES[rs])
+                        format!("JR {}", reg_names[rs])
                     }
                     FUNCT_JALR => {
                         if rd == 31 {
-                            format!("JALR {}", REG_NAMES[rs])
+                            format!("JALR {}", reg_names[rs])
                         }
                         else {
-                            format!("JALR {}, {}", REG_NAMES[rd], REG_NAMES[rs])
+                            format!("JALR {}, {}", reg_names[rd], reg_names[rs])
                         }
                     }
                     SYSCALL => { 
                         "SYSCALL".to_owned()
                     }
                     FUNCT_ADD => {
-                        format!("ADD {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("ADD {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_ADDU => {
-                        format!("ADDU {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("ADDU {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_SUB => {
-                        format!("SUB {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("SUB {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_SUBU => {
-                        format!("SUBU {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("SUBU {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_AND => {
-                        format!("AND {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("AND {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_OR => {
-                        format!("OR {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("OR {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_XOR => {
-                        format!("XOR {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("XOR {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_NOR => {
-                        format!("NOR {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("NOR {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_SLT => {
-                        format!("SLT {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("SLT {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     FUNCT_SLTU => {
-                        format!("SLTU {}, {}, {}", REG_NAMES[rd], REG_NAMES[rs], REG_NAMES[rt])
+                        format!("SLTU {}, {}, {}", reg_names[rd], reg_names[rs], reg_names[rt])
                     }
                     _ => {
                         "not supported argument".to_owned()
@@ -164,16 +184,16 @@ pub fn get_dissassembly(machine_code: u32) -> String{
 
                 match b_funct {
                     B_FUNCT_BGEZ => {
-                        format!("BGEZ {}, {}", REG_NAMES[rs], immediate)
+                        format!("BGEZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
                     }
                     B_FUNCT_BLTZ => {
-                        format!("BLTZ {}, {}", REG_NAMES[rs], immediate)
+                        format!("BLTZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
                     }
                     B_FUNCT_BGEZAL => {
-                        format!("BGEZAL {}, {}", REG_NAMES[rs], immediate)
+                        format!("BGEZAL {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
                     }
                     B_FUNCT_BLTZAL => {
-                        format!("BLTZAL {}, {}", REG_NAMES[rs], immediate)
+                        format!("BLTZAL {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
                     }
                     _ => {
                         "not supported argument".to_owned()
@@ -181,88 +201,88 @@ pub fn get_dissassembly(machine_code: u32) -> String{
                 }
             }
             OP_J => {
-                format!("J {}", target)
+                format!("J {}", symbol_jump(innstruction_address, target, symbol_table))
             }
             OP_JAL => {
-                format!("JAL {}", target)
+                format!("JAL {}", symbol_jump(innstruction_address, target, symbol_table))
             }
             OP_BEQ => {
-                format!("BEQ {}, {}, {}", REG_NAMES[rs], REG_NAMES[rt], immediate)
+                format!("BEQ {}, {}, {}", reg_names[rs], reg_names[rt], symbol_branch(innstruction_address, immediate, symbol_table))
             }
             OP_BNE => {
-                format!("BNE {}, {}, {}", REG_NAMES[rs], REG_NAMES[rt], immediate)
+                format!("BNE {}, {}, {}", reg_names[rs], reg_names[rt], symbol_branch(innstruction_address, immediate, symbol_table))
             }
             OP_BLEZ => {
-                format!("BLEZ {}, {}", REG_NAMES[rs], immediate)
+                format!("BLEZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
             }
             OP_BGTZ => {
-                format!("BGTZ {}, {}", REG_NAMES[rs], immediate)
+                format!("BGTZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
             }
 
             OP_ADDI => {
-                format!("ADDI {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("ADDI {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_ADDIU => {
-                format!("ADDIU {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("ADDIU {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_SLTI => {
-                format!("SLTI {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("SLTI {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_SLTIU => {
-                format!("SLTIU {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("SLTIU {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_ANDI => {
-                format!("ANDI {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("ANDI {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_ORI => {
-                format!("ORI {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("ORI {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_XORI => {
-                format!("XORI {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("XORI {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_LUI => {
-                format!("LUI {}, {}, {}", REG_NAMES[rt], REG_NAMES[rs], immediate)
+                format!("LUI {}, {}, {}", reg_names[rt], reg_names[rs], immediate)
             }
             OP_CP0 => { 
                 "CP0".to_owned()
             }
             OP_LB => {
-                format!("LB {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LB {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
             OP_LBU => {
-                format!("LBU {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LBU {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
             OP_LH => {
-                format!("LH {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LH {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
             OP_LHU => {
-                format!("LHU {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LHU {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
             OP_LW => {
-                format!("LW {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LW {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
 
             OP_SB => {
-                format!("SB {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("SB {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
             OP_SH => {
-                format!("Sh {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("Sh {}, {}({})", reg_names[rt], immediate, rs as i16)
             } 
             OP_SW => {
-                format!("SW {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("SW {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
 
             OP_LWL => {
-                format!("LWL {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LWL {}, {}({})", reg_names[rt], immediate, rs as i16)
             } 
             OP_LWR => {
-                format!("LWR {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("LWR {}, {}({})", reg_names[rt], immediate, rs as i16)
             } 
             OP_SWL => {
-                format!("SWL {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("SWL {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
             OP_SWR => {
-                format!("SWR {}, {}({})", REG_NAMES[rt], immediate, rs as i16)
+                format!("SWR {}, {}({})", reg_names[rt], immediate, rs as i16)
             }
 
             _ => {
@@ -272,6 +292,42 @@ pub fn get_dissassembly(machine_code: u32) -> String{
 
 }
 
+
+fn calc_branch(cur_adrs: u32, imm: i16) -> u32{
+    cur_adrs.overflowing_add(4).0.overflowing_add(((imm as i32) as u32).overflowing_shl(2).0).0
+}
+
+fn calc_jump(cur_adrs: u32, target: u32) -> u32{
+    (cur_adrs & 0xf000_0000) | ((target << 2) & 0x0fff_ffff)
+}
+
+fn symbol_branch(cur_adrs: u32, imm: i16, symbol_table: HashMap<u32,String>) -> String {
+    let adrs = calc_branch(cur_adrs, imm);
+    match symbol_table.get(&adrs) {
+        Some(sym) => format!("{} <{}>", imm, sym),
+        None => format!("{}",imm),
+    }
+}
+
+fn symbol_jump(cur_adrs: u32, target: u32, symbol_table: HashMap<u32,String>) -> String {
+    let adrs = calc_jump(cur_adrs, target);
+    match symbol_table.get(&adrs) {
+        Some(sym) => format!("{} <{}>", target, sym),
+        None => format!("{}",target),
+    }
+}
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn test(){
+        let mut sym_tab: HashMap<u32, String> = HashMap::new();
+        sym_tab.insert(0x00000108, "decode_if".into());
+        let instr: u32 = 0x11a0001a; 
+        let instr_adrs: u32 = 0x9c;
+        assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_dissassembly_adv(instr, instr_adrs, sym_tab, true));
+    }
+}
 
 
 
