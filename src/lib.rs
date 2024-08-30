@@ -85,10 +85,10 @@ const REG_NUMBER: [&str; 32] = [
 /// assert_eq!(instr_asm, "ADDIU $a1, $a1, 1".to_string())
 /// ```
 pub fn get_disassembly(machine_code: u32) -> String{
-    get_disassembly_adv(machine_code, 0, HashMap::new(),true)
+    get_disassembly_adv(machine_code, 0, &HashMap::new(),true)
 }
 /// Takes in MIPS machine code and return MIPS assembly
-fn get_disassembly_adv(machine_code: u32, instruction_address:u32, symbol_table: HashMap<u32,String>, use_reg_names: bool) -> String{
+fn get_disassembly_adv(machine_code: u32, instruction_address:u32, symbol_table: &HashMap<u32,String>, use_reg_names: bool) -> String{
 
     let reg_names = match use_reg_names {
         true => REG_NAMES,
@@ -301,7 +301,7 @@ fn calc_jump(cur_adrs: u32, target: u32) -> u32{
     (cur_adrs & 0xf000_0000) | ((target << 2) & 0x0fff_ffff)
 }
 
-fn symbol_branch(cur_adrs: u32, imm: i16, symbol_table: HashMap<u32,String>) -> String {
+fn symbol_branch(cur_adrs: u32, imm: i16, symbol_table: &HashMap<u32,String>) -> String {
     let adrs = calc_branch(cur_adrs, imm);
     match symbol_table.get(&adrs) {
         Some(sym) => format!("{} <{}>", imm, sym),
@@ -309,7 +309,7 @@ fn symbol_branch(cur_adrs: u32, imm: i16, symbol_table: HashMap<u32,String>) -> 
     }
 }
 
-fn symbol_jump(cur_adrs: u32, target: u32, symbol_table: HashMap<u32,String>) -> String {
+fn symbol_jump(cur_adrs: u32, target: u32, symbol_table: &HashMap<u32,String>) -> String {
     let adrs = calc_jump(cur_adrs, target);
     match symbol_table.get(&adrs) {
         Some(sym) => format!("{} <{}>", target, sym),
@@ -325,7 +325,7 @@ mod test {
         sym_tab.insert(0x00000108, "decode_if".into());
         let instr: u32 = 0x11a0001a; 
         let instr_adrs: u32 = 0x9c;
-        assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_disassembly_adv(instr, instr_adrs, sym_tab, true));
+        assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_disassembly_adv(instr, instr_adrs, &sym_tab, true));
     }
 }
 
