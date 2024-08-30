@@ -1,0 +1,33 @@
+{
+    "editor.formatOnSave": true,
+    "cSpell.words": [
+        "ADDU",
+        "adrs",
+        "BGEZ",
+        "BGEZAL",
+        "BGTZ",
+        "BLEZ",
+        "BLTZAL",
+        "FUNCT",
+        "JALR",
+        "shamt",
+        "SLLV",
+        "SLTI",
+        "SLTIU",
+        "SLTU",
+        "SRAV",
+        "SRLV",
+        "SUBU",
+        "SYSCALL",
+        "XORI"
+    ],
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/objects",
+        ".vscode",
+        ".vscode-insiders",
+        "Cargo.toml"
+    ]
+}

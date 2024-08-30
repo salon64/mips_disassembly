@@ -2,7 +2,7 @@
 name = "MIPS_disassembly"
 version = "0.1.2"
 edition = "2021"
-authors = ["salon64"]
+authors = ["salon64", "Olle Ronstad"]
 description = "Takes MIPS machine code and return MIPS assembly."
 license = "MIT"
 
