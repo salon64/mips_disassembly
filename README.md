@@ -1,7 +1,7 @@
 # MIPS_disassembly
 This crate dissembles u32 into mips assembly
 
-## Exampels
+## Examples
 ```rust
 use MIPS_disassembly::get_disassembly;
 
@@ -9,15 +9,6 @@ let instr: u32 = 0x24a50001;
 let instr_asm: String = get_disassembly(instr);
 assert_eq!(instr_asm, "ADDIU $a1, $a1, 1".to_string())
 ```
-
-```rust
-use MIPS_disassembly::get_disassembly;
-
-let instr: u32 = 0x24a50001;
-let instr_asm: String = get_disassembly(instr);
-assert_eq!(instr_asm, "ADDIU $a1, $a1, 1".to_string())
-```
-
 ```rust
 use MIPS_disassembly::get_disassembly_adv
 
