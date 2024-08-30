@@ -81,3 +81,7 @@ assert_eq!(
 
 # Supported pseudo instructions
 - NOP
+- B
+- BAL
+- MOVE
+- JALR (omits $rd if its $31/$ra)

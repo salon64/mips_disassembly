@@ -209,7 +209,7 @@ fn get_disassembly_adv(
                 format!("JR {}", reg_names[rs])
             }
             FUNCT_JALR => {
-                if rd == 31 {
+                if pse && rd == 31 {
                     format!("JALR {}", reg_names[rs])
                 } else {
                     format!("JALR {}, {}", reg_names[rd], reg_names[rs])
@@ -217,10 +217,14 @@ fn get_disassembly_adv(
             }
             SYSCALL => "SYSCALL".to_owned(),
             FUNCT_ADD => {
-                format!(
-                    "ADD {}, {}, {}",
-                    reg_names[rd], reg_names[rs], reg_names[rt]
-                )
+                if pse && rt == 0 {
+                    format!("MOVE {}, {}", reg_names[rd], reg_names[rs])
+                } else {
+                    format!(
+                        "ADD {}, {}, {}",
+                        reg_names[rd], reg_names[rs], reg_names[rt]
+                    )
+                }
             }
             FUNCT_ADDU => {
                 format!(
@@ -294,11 +298,18 @@ fn get_disassembly_adv(
                     )
                 }
                 B_FUNCT_BGEZAL => {
-                    format!(
-                        "BGEZAL {}, {}",
-                        reg_names[rs],
-                        symbol_branch(instruction_address, immediate, symbol_table)
-                    )
+                    if pse && rs == 0 {
+                        format!(
+                            "BAL {}",
+                            symbol_branch(instruction_address, immediate, symbol_table)
+                        )
+                    } else {
+                        format!(
+                            "BGEZAL {}, {}",
+                            reg_names[rs],
+                            symbol_branch(instruction_address, immediate, symbol_table)
+                        )
+                    }
                 }
                 B_FUNCT_BLTZAL => {
                     format!(
@@ -323,12 +334,19 @@ fn get_disassembly_adv(
             )
         }
         OP_BEQ => {
-            format!(
-                "BEQ {}, {}, {}",
-                reg_names[rs],
-                reg_names[rt],
-                symbol_branch(instruction_address, immediate, symbol_table)
-            )
+            if pse && rs == 0 && rt == 0 {
+                format!(
+                    "B {}",
+                    symbol_branch(instruction_address, immediate, symbol_table)
+                )
+            } else {
+                format!(
+                    "BEQ {}, {}, {}",
+                    reg_names[rs],
+                    reg_names[rt],
+                    symbol_branch(instruction_address, immediate, symbol_table)
+                )
+            }
         }
         OP_BNE => {
             format!(
