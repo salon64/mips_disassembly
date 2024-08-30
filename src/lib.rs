@@ -88,7 +88,7 @@ pub struct MipsDisassemblyOptions {
     pub pseudo_instructions: bool,
 }
 impl MipsDisassemblyOptions {
-    fn new(use_reg_names: bool, pseudo_instructions: bool) -> Self {
+    pub fn new(use_reg_names: bool, pseudo_instructions: bool) -> Self {
         Self {
             use_reg_names,
             pseudo_instructions,
@@ -125,6 +125,10 @@ pub fn get_disassembly(machine_code: u32) -> String {
 /// Takes in MIPS machine code and return MIPS assembly
 /// # Examples
 /// ```
+/// use MIPS_disassembly::get_disassembly_adv;
+/// use MIPS_disassembly::MipsDisassemblyOptions;
+/// use std::collections::HashMap;
+///
 /// let mut sym_tab: HashMap<u32, String> = HashMap::new();
 /// sym_tab.insert(0x00000108, "decode_if".into());
 /// let instr: u32 = 0x11a0001a;
@@ -139,7 +143,7 @@ pub fn get_disassembly(machine_code: u32) -> String {
 ///     )
 /// );
 /// ```
-fn get_disassembly_adv(
+pub fn get_disassembly_adv(
     machine_code: u32,
     instruction_address: u32,
     symbol_table: &HashMap<u32, String>,
@@ -469,8 +473,9 @@ fn symbol_jump(cur_adrs: u32, target: u32, symbol_table: &HashMap<u32, String>) 
 #[cfg(test)]
 mod test {
     use super::*;
+
     #[test]
-    fn test() {
+    fn simple_test() {
         let mut sym_tab: HashMap<u32, String> = HashMap::new();
         sym_tab.insert(0x00000108, "decode_if".into());
         let instr: u32 = 0x11a0001a;
@@ -482,6 +487,28 @@ mod test {
                 instr_adrs,
                 &sym_tab,
                 &MipsDisassemblyOptions::new(true, true)
+            )
+        );
+    }
+    #[test]
+    fn pseudo_instructions_test() {
+        let instr: u32 = 0x0;
+        assert_eq!(
+            "NOP",
+            get_disassembly_adv(
+                instr,
+                0x0,
+                &HashMap::new(),
+                &MipsDisassemblyOptions::new(true, true)
+            )
+        );
+        assert_eq!(
+            "SLL $zero, $zero, $zero",
+            get_disassembly_adv(
+                instr,
+                0x0,
+                &HashMap::new(),
+                &MipsDisassemblyOptions::new(true, false)
             )
         );
     }
