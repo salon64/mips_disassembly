@@ -78,17 +78,17 @@ const REG_NUMBER: [&str; 32] = [
 // 24a50001        addiu   a1,a1,1
 /// takes in a mips machine code and returns a string
 /// ```
-/// use MIPS_disassembly::get_dissassembly;
+/// use MIPS_disassembly::get_disassembly;
 /// 
 /// let instr: u32 = 0x24a50001;
-/// let instr_asm: String = get_dissassembly(instr);
+/// let instr_asm: String = get_disassembly(instr);
 /// assert_eq!(instr_asm, "ADDIU $a1, $a1, 1".to_string())
 /// ```
-pub fn get_dissassembly(machine_code: u32) -> String{
-    get_dissassembly_adv(machine_code, 0, HashMap::new(),true)
+pub fn get_disassembly(machine_code: u32) -> String{
+    get_disassembly_adv(machine_code, 0, HashMap::new(),true)
 }
 /// Takes in MIPS machine code and return MIPS assembly
-fn get_dissassembly_adv(machine_code: u32, innstruction_address:u32, symbol_table: HashMap<u32,String>, use_reg_names: bool) -> String{
+fn get_disassembly_adv(machine_code: u32, instruction_address:u32, symbol_table: HashMap<u32,String>, use_reg_names: bool) -> String{
 
     let reg_names = match use_reg_names {
         true => REG_NAMES,
@@ -184,16 +184,16 @@ fn get_dissassembly_adv(machine_code: u32, innstruction_address:u32, symbol_tabl
 
                 match b_funct {
                     B_FUNCT_BGEZ => {
-                        format!("BGEZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
+                        format!("BGEZ {}, {}", reg_names[rs], symbol_branch(instruction_address, immediate, symbol_table))
                     }
                     B_FUNCT_BLTZ => {
-                        format!("BLTZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
+                        format!("BLTZ {}, {}", reg_names[rs], symbol_branch(instruction_address, immediate, symbol_table))
                     }
                     B_FUNCT_BGEZAL => {
-                        format!("BGEZAL {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
+                        format!("BGEZAL {}, {}", reg_names[rs], symbol_branch(instruction_address, immediate, symbol_table))
                     }
                     B_FUNCT_BLTZAL => {
-                        format!("BLTZAL {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
+                        format!("BLTZAL {}, {}", reg_names[rs], symbol_branch(instruction_address, immediate, symbol_table))
                     }
                     _ => {
                         "not supported argument".to_owned()
@@ -201,22 +201,22 @@ fn get_dissassembly_adv(machine_code: u32, innstruction_address:u32, symbol_tabl
                 }
             }
             OP_J => {
-                format!("J {}", symbol_jump(innstruction_address, target, symbol_table))
+                format!("J {}", symbol_jump(instruction_address, target, symbol_table))
             }
             OP_JAL => {
-                format!("JAL {}", symbol_jump(innstruction_address, target, symbol_table))
+                format!("JAL {}", symbol_jump(instruction_address, target, symbol_table))
             }
             OP_BEQ => {
-                format!("BEQ {}, {}, {}", reg_names[rs], reg_names[rt], symbol_branch(innstruction_address, immediate, symbol_table))
+                format!("BEQ {}, {}, {}", reg_names[rs], reg_names[rt], symbol_branch(instruction_address, immediate, symbol_table))
             }
             OP_BNE => {
-                format!("BNE {}, {}, {}", reg_names[rs], reg_names[rt], symbol_branch(innstruction_address, immediate, symbol_table))
+                format!("BNE {}, {}, {}", reg_names[rs], reg_names[rt], symbol_branch(instruction_address, immediate, symbol_table))
             }
             OP_BLEZ => {
-                format!("BLEZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
+                format!("BLEZ {}, {}", reg_names[rs], symbol_branch(instruction_address, immediate, symbol_table))
             }
             OP_BGTZ => {
-                format!("BGTZ {}, {}", reg_names[rs], symbol_branch(innstruction_address, immediate, symbol_table))
+                format!("BGTZ {}, {}", reg_names[rs], symbol_branch(instruction_address, immediate, symbol_table))
             }
 
             OP_ADDI => {
@@ -325,7 +325,7 @@ mod test {
         sym_tab.insert(0x00000108, "decode_if".into());
         let instr: u32 = 0x11a0001a; 
         let instr_adrs: u32 = 0x9c;
-        assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_dissassembly_adv(instr, instr_adrs, sym_tab, true));
+        assert_eq!("BEQ $t5, $zero, 26 <decode_if>",get_disassembly_adv(instr, instr_adrs, sym_tab, true));
     }
 }
 
