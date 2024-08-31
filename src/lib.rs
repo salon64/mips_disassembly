@@ -401,42 +401,42 @@ pub fn get_disassembly_adv(
         }
         OP_CP0 => "CP0".to_owned(),
         OP_LB => {
-            format!("LB {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LB {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_LBU => {
-            format!("LBU {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LBU {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_LH => {
-            format!("LH {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LH {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_LHU => {
-            format!("LHU {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LHU {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_LW => {
-            format!("LW {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LW {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
 
         OP_SB => {
-            format!("SB {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("SB {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_SH => {
-            format!("Sh {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("Sh {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_SW => {
-            format!("SW {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("SW {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
 
         OP_LWL => {
-            format!("LWL {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LWL {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_LWR => {
-            format!("LWR {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("LWR {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_SWL => {
-            format!("SWL {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("SWL {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
         OP_SWR => {
-            format!("SWR {}, {}({})", reg_names[rt], immediate, rs as i16)
+            format!("SWR {}, {}({})", reg_names[rt], immediate, reg_names[rs])
         }
 
         _ => "not supported argument".to_owned(),
