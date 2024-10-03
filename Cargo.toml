@@ -1,6 +1,6 @@
 [package]
 name = "MIPS_disassembly"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 authors = ["salon64", "Olle Ronstad"]
 description = "Takes MIPS machine code and return MIPS assembly."
