@@ -511,7 +511,7 @@ pub fn get_disassembly_adv(
             )
         }
 
-        _ => "not supported argument".to_owned(),
+        _ => format!("{}: {}", "not supported argument".to_owned(), machine_code),
     }
 }
 
