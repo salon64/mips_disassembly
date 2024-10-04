@@ -175,112 +175,112 @@ pub fn get_disassembly_adv(
         OP_0 => match funct {
             FUNCT_SLL => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SLL", reg_names[rd], reg_names[rt], reg_names[shamt]
                 )
             }
             FUNCT_SRL => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SRL", reg_names[rd as usize], reg_names[rt], reg_names[shamt]
                 )
             }
             FUNCT_SRA => {
                 format!(
-                    "{:<6} {} {} {}",
+                    "{:<6} {:<6} {:<6} {:<6}",
                     "SRA", reg_names[rd], reg_names[rt], reg_names[shamt]
                 )
             }
             FUNCT_SLLV => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SLLV", reg_names[rd], reg_names[rt], reg_names[rs]
                 )
             }
             FUNCT_SRLV => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SRLV", reg_names[rd], reg_names[rt], reg_names[rs]
                 )
             }
             FUNCT_SRAV => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SRAV", reg_names[rd], reg_names[rt], reg_names[rs]
                 )
             }
             FUNCT_JR => {
-                format!("{:<6} {}", "JR", reg_names[rs])
+                format!("{:<6} {:<6}", "JR", reg_names[rs])
             }
             FUNCT_JALR => {
                 if pse && rd == 31 {
-                    format!("{:<6} {}", "JALR", reg_names[rs])
+                    format!("{:<6} {:<6}", "JALR", reg_names[rs])
                 } else {
-                    format!("{:<6} {}, {}", "JALR", reg_names[rd], reg_names[rs])
+                    format!("{:<6} {:<6}, {:<6}", "JALR", reg_names[rd], reg_names[rs])
                 }
             }
             SYSCALL => format!("{:<6}", "SYSCALL").to_owned(),
             FUNCT_ADD => {
                 if pse && rt == 0 {
-                    format!("{:<6} {}, {}", "MOVE", reg_names[rd], reg_names[rs])
+                    format!("{:<6} {:<6}, {:<6}", "MOVE", reg_names[rd], reg_names[rs])
                 } else {
                     format!(
-                        "{:<6} {}, {}, {}",
+                        "{:<6} {:<6}, {:<6}, {:<6}",
                         "ADD", reg_names[rd], reg_names[rs], reg_names[rt]
                     )
                 }
             }
             FUNCT_ADDU => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "ADDU", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_SUB => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SUB", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_SUBU => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SUBU", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_AND => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "AND", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_OR => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "OR", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_XOR => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "XOR", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_NOR => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "NOR", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_SLT => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SLT", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
             FUNCT_SLTU => {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "SLTU", reg_names[rd], reg_names[rs], reg_names[rt]
                 )
             }
@@ -292,7 +292,7 @@ pub fn get_disassembly_adv(
             match b_funct {
                 B_FUNCT_BGEZ => {
                     format!(
-                        "{:<6} {}, {}",
+                        "{:<6} {:<6}, {:<6}",
                         "BGEZ",
                         reg_names[rs],
                         symbol_branch(instruction_address, immediate, symbol_table)
@@ -300,7 +300,7 @@ pub fn get_disassembly_adv(
                 }
                 B_FUNCT_BLTZ => {
                     format!(
-                        "{:<6} {}, {}",
+                        "{:<6} {:<6}, {:<6}",
                         "BLTZ",
                         reg_names[rs],
                         symbol_branch(instruction_address, immediate, symbol_table)
@@ -309,13 +309,13 @@ pub fn get_disassembly_adv(
                 B_FUNCT_BGEZAL => {
                     if pse && rs == 0 {
                         format!(
-                            "{:<6} {}",
+                            "{:<6} {:<6}",
                             "BAL",
                             symbol_branch(instruction_address, immediate, symbol_table)
                         )
                     } else {
                         format!(
-                            "{:<6} {}, {}",
+                            "{:<6} {:<6}, {:<6}",
                             "BGEZAL",
                             reg_names[rs],
                             symbol_branch(instruction_address, immediate, symbol_table)
@@ -324,25 +324,25 @@ pub fn get_disassembly_adv(
                 }
                 B_FUNCT_BLTZAL => {
                     format!(
-                        "{:<6} {}, {}",
+                        "{:<6} {:<6}, {:<6}",
                         "BLTZAL",
                         reg_names[rs],
                         symbol_branch(instruction_address, immediate, symbol_table)
                     )
                 }
-                _ => "not supported argument".to_owned(),
+                _ => b_funct.to_string(),
             }
         }
         OP_J => {
             format!(
-                "{:<6} {}",
+                "{:<6} {:<6}",
                 "J",
                 symbol_jump(instruction_address, target, symbol_table)
             )
         }
         OP_JAL => {
             format!(
-                "{:<6} {}",
+                "{:<6} {:<6}",
                 "JAL",
                 symbol_jump(instruction_address, target, symbol_table)
             )
@@ -350,13 +350,13 @@ pub fn get_disassembly_adv(
         OP_BEQ => {
             if pse && rs == 0 && rt == 0 {
                 format!(
-                    "{:<6} {}",
+                    "{:<6} {:<6}",
                     "B",
                     symbol_branch(instruction_address, immediate, symbol_table)
                 )
             } else {
                 format!(
-                    "{:<6} {}, {}, {}",
+                    "{:<6} {:<6}, {:<6}, {:<6}",
                     "BEQ",
                     reg_names[rs],
                     reg_names[rt],
@@ -366,7 +366,7 @@ pub fn get_disassembly_adv(
         }
         OP_BNE => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "BNE",
                 reg_names[rs],
                 reg_names[rt],
@@ -375,7 +375,7 @@ pub fn get_disassembly_adv(
         }
         OP_BLEZ => {
             format!(
-                "{:<6} {}, {}",
+                "{:<6} {:<6}, {:<6}",
                 "BLEZ",
                 reg_names[rs],
                 symbol_branch(instruction_address, immediate, symbol_table)
@@ -383,7 +383,7 @@ pub fn get_disassembly_adv(
         }
         OP_BGTZ => {
             format!(
-                "{:<6} {}, {}",
+                "{:<6} {:<6}, {:<6}",
                 "BGTZ",
                 reg_names[rs],
                 symbol_branch(instruction_address, immediate, symbol_table)
@@ -391,122 +391,122 @@ pub fn get_disassembly_adv(
         }
         OP_ADDI => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "ADDI", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_ADDIU => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "ADDIU", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_SLTI => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "SLTI", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_SLTIU => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "SLTIU", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_ANDI => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "ANDI", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_ORI => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "ORI", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_XORI => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "XORI", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_LUI => {
             format!(
-                "{:<6} {}, {}, {}",
+                "{:<6} {:<6}, {:<6}, {:<6}",
                 "LUI", reg_names[rt], reg_names[rs], immediate
             )
         }
         OP_CP0 => format!("{:<6}", "CP0").to_owned(),
         OP_LB => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LB", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_LBU => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LBU", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_LH => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LH", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_LHU => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LHU", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_LW => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LW", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_SB => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "SB", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_SH => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "Sh", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_SW => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "SW", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_LWL => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LWL", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_LWR => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "LWR", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_SWL => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "SWL", reg_names[rt], immediate, reg_names[rs]
             )
         }
         OP_SWR => {
             format!(
-                "{:<6} {}, {}({})",
+                "{:<6} {:<6}, {:<6}({:<6})",
                 "SWR", reg_names[rt], immediate, reg_names[rs]
             )
         }
