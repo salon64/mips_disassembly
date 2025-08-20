@@ -46,11 +46,23 @@ const OP_ORI: u32 = 0b00_1101;
 const OP_XORI: u32 = 0b00_1110;
 const OP_LUI: u32 = 0b00_1111;
 
+//TODO implement missing instructions
 const OP_CP0: u32 = 0b01_0000;
-// const CP0_FUNCT_MFC0: u32 = 0; //TODO implement missing instructions
-// const CP0_FUNCT_MTF0: u32 = 0b0_0100;
-// const CP0_FUNCT_SPECIAL: u32 = 0b1_0000;
-// const CP0_FUNCT_SPECIAL_: u32 = 0b1_0000;
+
+const RS_MFC0: u32 = 0b0_0000;
+const RS_MTC0: u32 = 0b0_0100;
+
+const RS_BC0: u32 = 0b0_1000; // branch on coprocessor
+const RT_BC0F: u32 = 0b0_0000;
+const RT_BC0T: u32 = 0b0_0001;
+
+const RS_TLB: u32 = 0b1_0000; // TLB Instructions
+const FUNCT_TLBR: u32 = 0b0_0001;
+const FUNCT_TLBWI: u32 = 0b0_0010;
+const FUNCT_TLBWR: u32 = 0b0_0100;
+const FUNCT_TLBP: u32 = 0b0_1000;
+const FUNCT_RFE: u32 = 0b1_0000;
+
 
 const OP_LB: u32 = 0b10_0000;
 const OP_LH: u32 = 0b10_0001;
@@ -176,19 +188,19 @@ pub fn get_disassembly_adv(
             FUNCT_SLL => {
                 format!(
                     "{:<6} {:<6}, {:<6}, {:<6}",
-                    "SLL", reg_names[rd], reg_names[rt], reg_names[shamt]
+                    "SLL", reg_names[rd], reg_names[rt], shamt
                 )
             }
             FUNCT_SRL => {
                 format!(
                     "{:<6} {:<6}, {:<6}, {:<6}",
-                    "SRL", reg_names[rd as usize], reg_names[rt], reg_names[shamt]
+                    "SRL", reg_names[rd as usize], reg_names[rt], shamt
                 )
             }
             FUNCT_SRA => {
                 format!(
                     "{:<6} {:<6} {:<6} {:<6}",
-                    "SRA", reg_names[rd], reg_names[rt], reg_names[shamt]
+                    "SRA", reg_names[rd], reg_names[rt], shamt
                 )
             }
             FUNCT_SLLV => {
@@ -286,6 +298,57 @@ pub fn get_disassembly_adv(
             }
             _ => "not supported argument".to_owned(),
         },
+        OP_CP0 => {
+            // format!("{:<6}", "CP0").to_owned(),
+            match rs as u32{
+                RS_MFC0 => {
+                    format!(
+                        "{:<6} {:<6}, {:<6}",
+                        "MFC0", reg_names[rt], reg_names[rd]
+                    )
+                }
+                RS_MTC0 => {
+                    format!(
+                        "{:<6} {:<6}, {:<6}",
+                        "MTC0", reg_names[rt], reg_names[rd]
+                    )
+                }
+                RS_BC0 => {
+                    match rt as u32 {
+                        RT_BC0F => {
+                            format!("{:<6}", "CP0").to_owned()
+                        }
+                        RT_BC0T => {
+                            format!("{:<6}", "CP0").to_owned()
+                        }
+                        _ => format!("{}: {}", "not supported argument".to_owned(), machine_code),
+                    }
+                }
+                RS_TLB => {
+                    match funct {
+                        FUNCT_TLBR => {
+                            format!("{:<6}", "CP0").to_owned()
+                        }
+                        FUNCT_TLBWI => {
+                            format!("{:<6}", "CP0").to_owned()
+                        }
+                        FUNCT_TLBWR => {
+                            format!("{:<6}", "CP0").to_owned()
+                        }
+                        FUNCT_TLBP => {
+                            format!("{:<6}", "CP0").to_owned()
+                        }
+                        FUNCT_RFE => {
+                            format!("{:<6}", "RFE").to_owned()
+                        }
+                        _ => format!("{}: {}", "not supported argument".to_owned(), machine_code),
+                    }
+                }
+                _ => format!("{}: {}", "not supported argument".to_owned(), machine_code),
+            }
+        }
+
+
         OP_1 => {
             let b_funct: u32 = (machine_code >> 16) & 0b11111;
 
@@ -436,8 +499,7 @@ pub fn get_disassembly_adv(
                 "{:<6} {:<6}, {:<6}, {:<6}",
                 "LUI", reg_names[rt], reg_names[rs], immediate
             )
-        }
-        OP_CP0 => format!("{:<6}", "CP0").to_owned(),
+        }     
         OP_LB => {
             format!(
                 "{:<6} {:<6}, {:<6}({:<6})",
