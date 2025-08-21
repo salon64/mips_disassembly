@@ -244,8 +244,8 @@ pub fn get_disassembly_adv(
             }
             FUNCT_ADDU => {
                 format!(
-                    "{:<6} {:<6}, {:<6}, {:<6}",
-                    "ADDU test", format!("{},", reg_names[rd]), format!("{},", reg_names[rs]), format!("{},", reg_names[rt])
+                    "{:<6} {:<6} {:<6} {:<6}",
+                    "ADDU", format!("{},", reg_names[rd]), format!("{},", reg_names[rs]), format!("{},", reg_names[rt])
                 )
             }
             FUNCT_SUB => {
