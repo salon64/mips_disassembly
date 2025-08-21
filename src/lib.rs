@@ -518,62 +518,82 @@ pub fn get_disassembly_adv(
         }
         OP_LH => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "LH", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "LH", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "LH", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_LHU => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "LHU", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "LHU", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "LHU", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_LW => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "LW", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "LW", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "LW", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_SB => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "SB", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "SB", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "SB", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_SH => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "Sh", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "Sh", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "SH", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_SW => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "SW", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "SW", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "SW", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_LWL => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "LWL", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "LWL", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "LWL", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_LWR => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "LWR", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "LWR", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "LWR", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_SWL => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "SWL", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "SWL", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "SWL", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
         OP_SWR => {
             format!(
-                "{:<6} {:<6}, {:<6}({:<6})",
-                "SWR", reg_names[rt], immediate, reg_names[rs]
+                // "{:<6} {:<6}, {:<6}({:<6})",
+                // "SWR", reg_names[rt], immediate, reg_names[rs]
+                "{:<6} {:<6} {:<12}",
+                "SWR", format!("{},", reg_names[rt]), format!("{}({})", immediate, reg_names[rs])
             )
         }
 
